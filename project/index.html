@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>가계부</title>
+
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+        <div class="main">
+            <div class="mainHeader">
+               <div id="accont">가계부</div>
+               <div id="remainMoney">현재 잔액</div>
+               <div id="money">money</div>
+            </div>
+            <div class="input">
+                <div class="inputMenu"><input type="text" placeholder="내용을 입력하세요(예: 점심값, 월급)"></div>
+                <div class="inputMenu"><input type="text" placeholder="금액을 입력하세요"></div>
+            </div>
+            <div class="tag">
+                <div><button class="tagButton" id="get">수입</button></div>
+                <div><button class="tagButton" id="use">지출</button></div>
+            </div>
+            <div class="add">
+                <button id="addButton">추가하기</button>
+            </div>
+            <hr>
+            <div class="history">
+                <div><button class="historyButton">전체</button></div>
+                <div><button class="historyButton">수입</button></div>
+                <div><button class="historyButton">지출</button></div>
+            </div>
+            <div class="all">
+                <div id="allGet">
+                    <div>총수입</div>
+                    <div class="allMoney">money</div>
+                </div>
+                <div id="spent">
+                    <div>총 지출</div>
+                    <div id = spentMoney>money</div>
+                </div>
+                <div id="remain">
+                    <div>잔액</div>
+                    <div class="allMoney" >금액</div>
+                </div>
+            </div>
+        </div>
+   <script src="./script.js"></script>
+</body>
+</html>
