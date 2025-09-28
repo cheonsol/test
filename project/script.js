@@ -1,22 +1,42 @@
-const account = [];
+let account = [];
+const saveData = localStorage.getItem('accountDate');
+
+if(saveData){
+    account = JSON.parse(saveData);
+}
 
 const saveButton = document.querySelector('#addButton');
 
 
+
 saveButton.addEventListener('click', add);
 
+function saveData(){
+    localStorage.setItem('accountDate', JSON.stringify(account));
+    
+}
 function show(){
     const list = document.getElementById('list');
+    
 
     list.innerHTML='';
+    const choice = document.querySelector('.historyButton.historyActive');
+    let fieldAccount = account;
 
-
-    account.forEach(item => {
+    if(choice){
+        if (choice.id === 'getHistory') {
+            fieldAccount = account.filter(item => item.price > 0);
+        } else if (choice.id === 'spentHistory') {
+            fieldAccount = account.filter(item => item.price < 0);
+        }
+    }
+    
+    fieldAccount.forEach(item => {
         const idValue = item.price > 0 ? 'getColor' : 'spentColor';
         const sign = item.price > 0 ? '+' : '-'
-        const itemHTML=
+        let itemHTML=
         `<div class="list-all">
-            <div class = inline>
+            <div class = "inline">
             <div class ="front">
             <div class="date">${item.registDate}</div>
             <div class="list-check">
@@ -32,24 +52,59 @@ function show(){
                 </div>
                 </div>
             
-            <div class ="delButton"><button>삭제</button></div>
+            <div class ="delButton"><button data-id ="${item.id}">삭제</button></div>
         
             </div>
             
         </div>`;
+
+    
         list.innerHTML += itemHTML;
     })
+
+    const deleteButton = document.querySelectorAll('.delButton button');
+
+    deleteButton.forEach(button =>{
+    button.addEventListener('click', (event) => {
+        const idToDelete = parseInt(event.currentTarget.dataset.id);
+
+        del(idToDelete);
+    })
+})
+
+    
 }
 
+
 function add() {
+
+    
     const inputName = document.querySelector('#inputName');
     const inputPrice = document.querySelector('#inputPrice');
 
     
     const check = document.getElementById('use').classList.contains('tagActive');
 
-    const name = inputName.value;
+    const name = inputName  .value;
     let price = parseInt(inputPrice.value);
+
+    if(inputName.value.trim() === ''){
+        alert('이름을 입력해주십시오.');
+        return;
+    }else if(inputPrice.value.trim() === ''){
+        alert('값을 입력해주십시오.');
+        return;
+    }
+
+    if(document.querySelector('.tagActive') === null){
+         alert('수입/지출을 선택해주십시오.');
+        return;
+    }
+
+    if(isNaN(inputPrice.value)){
+        alert('숫자만 입력할 수 있습니다.');
+        return;
+    }
 
     if(check){
     price *= -1;
@@ -69,6 +124,7 @@ function add() {
     allGet();
     spentMoney();
     balance();
+    saveData();
 }
 
 function clickButton(){
@@ -98,8 +154,13 @@ function clickHistory(){
             event.currentTarget.classList.add("historyActive");
 
             console.log("클릭된 버튼:", event.currentTarget);
+
+            show();
         });
+
     });
+
+  
 }
 
 function allGet(){
@@ -136,6 +197,7 @@ function balance(){
     const getMoney = document.querySelector('#allMoney')
     const spentMoney = document.querySelector('#spentMoney')
     const balance = document.querySelector('#balance')
+    const money = document.querySelector('#money')
    let total = 0;
    for(let i = 0; i< account.length; i++){
         if(account[i].price < 0){
@@ -151,12 +213,30 @@ function balance(){
   
    console.log("총 합계:", total.toLocaleString());
    balance.textContent = `${total.toLocaleString()}`
+   money.textContent = `${total.toLocaleString()}`
 
    if(total > 0){
     balance.classList = 'plus';
+    money.classList = 'plus';
    }else if(total<0){
     balance.classList = 'minus';
+    money.classList = 'minus';
    }
+}
+
+function del(id){
+    account =account.filter(item => item.id !== id);
+
+        update();
+    saveData();
+   
+}
+
+function update(){
+    show();
+    allGet();
+    spentMoney();
+    balance();
 }
 
 
